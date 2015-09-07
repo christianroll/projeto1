@@ -9,7 +9,7 @@ Esta aplicação permite consultar a saída de determinados comandos (`ps`, `df`
 `finger` e `uptime`) em diferentes máquinas da rede através de uma interface
 web.
 
-A aplicação é formada pelos seguintes programas:
+A aplicação é formada pelas seguintes partes:
 
 - `webserver.py`: programa CGI acoplado ao servidor web;
 - `index.html`: interface web;
