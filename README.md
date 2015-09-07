@@ -5,6 +5,8 @@ Professor [Cesar Marcondes](https://github.com/cmarcond) - [DC UFSCar](http://ww
 
 ## Descrição do projeto
 
+Descrição completa em [Projeto_01-description.pdf](docs/Projeto_01-description.pdf)
+
 Esta aplicação permite consultar a saída de determinados comandos (`ps`, `df`,
 `finger` e `uptime`) em diferentes máquinas da rede através de uma interface
 web.
