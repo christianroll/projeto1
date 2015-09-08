@@ -12,6 +12,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import cgi
+import cgitb
 
 
 __authors__ = (
@@ -23,66 +24,25 @@ __license__ = "GPL"
 __version__ = "1.0"
 
 
+cgitb.enable()
+
+
 # CGI header
 print("Content-type: text/html\n\n")
 
 
-# Imprime a versão do python, as variáveis de ambiente e as mensagens do cgitb
-DEBUG = True
-DEBUG_PRINT = False
-if DEBUG:
-    import sys
-    import os
-    import cgitb
-    cgitb.enable()
-
-
 form = cgi.FieldStorage()
 m1 = form.getlist("m1")  # Lista da máquina 1
-m2 = form.getlist("m2")  # Lista da máquina 2
+m2 = ["maquina1", "maquina2", "maquina3"]
 
 
-print("""
-<!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <title>Redes - Projeto 1</title>
-  </head>
-  <body>
-    <header>
-      <h1>Projeto 1</h1>
-    </header>
-<form name="comandos" method="post" action="webserver.py">
-  <label>Maquina 1: </label>
-  <label><input type="checkbox" name="m1" value="ps">ps</label>
-  <label><input type="checkbox" name="m1" value="df">df</label>
-  <label><input type="checkbox" name="m1" value="finger">finger</label>
-  <label><input type="checkbox" name="m1" value="uptime">uptime</label>
-  <label><input type="checkbox" name="m1" value="rm" disabled>rm -rf /</label>
-  <br>
-  <label>Maquina 2: </label>
-  <label><input type="checkbox" name="m2" value="ps">ps</label>
-  <label><input type="checkbox" name="m2" value="df">df</label>
-  <label><input type="checkbox" name="m2" value="finger">finger</label>
-  <label><input type="checkbox" name="m2" value="uptime">uptime</label>
-  <br>
-  <button type="submit" name="Enviar">Enviar</button>
-</form>
-<h3>Comandos Enviados:</h3>""")
+from mako.template import Template
+from mako.lookup import TemplateLookup
 
 
-print("<p>Maquina 1: {}</p>".format(", ".join(m1)))
-print("<p>Maquina 2: {}</p>".format(", ".join(m2)))
+mylookup = TemplateLookup(directories=['../templates'],
+        module_directory='/tmp/mako_modules',collection_size=100,
+        input_encoding='utf-8', output_encoding='utf-8',
+        encoding_errors='replace')
 
-
-if DEBUG:
-    print('<div id="debug" style="display: {};">'.format("block" if DEBUG_PRINT else "none"))
-    print("<hr><h3>Debug</h3><pre>")
-    print("Versao do Python: {}<br>".format(sys.version))
-    for param in list(os.environ.keys()):
-        print("{:<30} = {}".format(param, os.environ[param]))
-    print("</pre><hr></div>")
-
-
-print("</body></html>")
+print(mylookup.get_template('index.mako').render(m1=m1, m2=m2))

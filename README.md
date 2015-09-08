@@ -23,6 +23,7 @@ A aplicação é formada pelas seguintes partes:
 
 [Apache HTTP Server](https://httpd.apache.org/)
 [Python 2.7](https://www.python.org/)
+[Mako Templates for Python](http://www.makotemplates.org/)
 
 
 ## Alunos
