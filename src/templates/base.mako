@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
     <head>
     <%block name="head">
         <meta charset="utf-8">
@@ -32,5 +33,13 @@
         <%block name="content">
         </%block>
         </div>
+        
+
+        <%block name="footer">
+        <footer>
+        <%include file="footer.mako"/>
+        </footer>
+        </%block>
+
     </body>
 </html>

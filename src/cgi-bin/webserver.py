@@ -34,10 +34,7 @@ print("Content-type: text/html\n\n")
 
 
 form = cgi.FieldStorage()
-m1 = ["maquina1", "maquina2", "maquina3"]
-m2 = ["maquina1", "maquina2", "maquina3"]
 
 
 serve_template('index.mako',
-               m1=m1,
-               m2=m2)
+               autores=", ".join(__authors__))
