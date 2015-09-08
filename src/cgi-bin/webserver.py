@@ -14,6 +14,8 @@ from __future__ import unicode_literals
 import cgi
 import cgitb
 
+from view import serve_template
+
 
 __authors__ = (
         'Christian Rollmann',
@@ -32,17 +34,10 @@ print("Content-type: text/html\n\n")
 
 
 form = cgi.FieldStorage()
-m1 = form.getlist("m1")  # Lista da máquina 1
+m1 = ["maquina1", "maquina2", "maquina3"]
 m2 = ["maquina1", "maquina2", "maquina3"]
 
 
-from mako.template import Template
-from mako.lookup import TemplateLookup
-
-
-mylookup = TemplateLookup(directories=['../templates'],
-        module_directory='/tmp/mako_modules',collection_size=100,
-        input_encoding='utf-8', output_encoding='utf-8',
-        encoding_errors='replace')
-
-print(mylookup.get_template('index.mako').render(m1=m1, m2=m2))
+serve_template('index.mako',
+               m1=m1,
+               m2=m2)
