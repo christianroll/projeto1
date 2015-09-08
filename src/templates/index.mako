@@ -9,6 +9,5 @@
 </%block>
 
 <%block name="content">
-    <pre>
-    </pre>
+    <%include file="form.mako"/>
 </%block>

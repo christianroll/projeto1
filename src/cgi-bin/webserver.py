@@ -15,6 +15,7 @@ import cgi
 import cgitb
 
 from view import serve_template
+from settings import maquinas
 
 
 __authors__ = (
@@ -32,9 +33,9 @@ cgitb.enable()
 # CGI header
 print("Content-type: text/html\n\n")
 
-
 form = cgi.FieldStorage()
 
 
 serve_template('index.mako',
-               autores=", ".join(__authors__))
+               autores=", ".join(__authors__),
+               maquinas=maquinas)
