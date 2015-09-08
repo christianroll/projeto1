@@ -19,6 +19,12 @@ A aplicação é formada pelas seguintes partes:
 - `daemon.py`: programa que executa comandos localmente e retorna as saídas.
 
 
+## Requerimentos
+
+[Apache HTTP Server](https://httpd.apache.org/)
+[Python 2.7](https://www.python.org/)
+
+
 ## Alunos
 
 *   [Christian Rollmann (414514)](https://github.com/christianroll)
