@@ -10,4 +10,9 @@
 
 <%block name="content">
     <%include file="form.mako"/>
+
+    %if respostas:
+        <%include file="respostas.mako"/>
+    %endif
+
 </%block>

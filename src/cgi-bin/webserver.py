@@ -35,7 +35,19 @@ print("Content-type: text/html\n\n")
 
 form = cgi.FieldStorage()
 
+# Envia os comandos para cada uma das máquinas e espera resposta
+respostas = []
+print("<pre>")
+for m in maquinas:
+    m['cmds'] = form.getlist(m['ip'])
+    for cmd in m['cmds']:
+        print('Enviando `{}` para "{}"'.format(cmd, m['ip']))
+        resposta = "TODO"
+        respostas.append(resposta)
+print("</pre>")
+
 
 serve_template('index.mako',
                autores=", ".join(__authors__),
-               maquinas=maquinas)
+               maquinas=maquinas,
+               respostas=respostas)
