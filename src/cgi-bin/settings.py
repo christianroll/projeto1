@@ -7,7 +7,8 @@ Cadastro manual das máquinas
 """
 
 maquinas = [
-        {'hostname': "Christian", 'ip': "10.0.0.1"},
-        {'hostname': "Isaac",     'ip': "10.0.0.2"},
-        {'hostname': "Julio",     'ip': "10.0.0.3"},
-        {'hostname': "Marcelo",   'ip': "10.0.0.4"}]
+        {'hostname': "Christian",   'ip': "10.0.0.1", 'porta': 10000},
+        {'hostname': "Isaac",       'ip': "10.0.0.2", 'porta': 10000},
+        {'hostname': "Julio",       'ip': "10.0.0.3", 'porta': 10000},
+        {'hostname': "Marcelo",     'ip': "10.0.0.4", 'porta': 10000},
+]
