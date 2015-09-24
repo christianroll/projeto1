@@ -2,7 +2,6 @@
 # -*-*- encoding: utf-8 -*-*-
 # Created: Tue, 08 Sep 2015 03:49:46 -0300
 
-from mako.template import Template
 from mako.lookup import TemplateLookup
 
 
