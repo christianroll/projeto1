@@ -3,16 +3,18 @@
 # Created: Tue, 01 Sep 2015 14:09:16 -0300
 
 """
-Webserver
+Webserver and Backend
 """
 
-# from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
 import cgi
 import cgitb
+
+import os
+import socket
 
 from view import serve_template
 from settings import maquinas
@@ -33,18 +35,41 @@ cgitb.enable()
 # CGI header
 print("Content-type: text/html\n\n")
 
-form = cgi.FieldStorage()
 
-# Envia os comandos para cada uma das máquinas e espera resposta
-respostas = []
-print("<pre>")
-for m in maquinas:
-    m['cmds'] = form.getlist(m['ip'])
-    for cmd in m['cmds']:
-        print('Enviando `{}` para "{}"'.format(cmd, m['ip']))
-        resposta = "TODO"
-        respostas.append(resposta)
-print("</pre>")
+respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
+
+
+# "Backend". Executado após form ser submetido.
+if respostas:
+    form = cgi.FieldStorage()
+    # Envia os comandos para cada uma das máquinas e espera resposta
+    print("<pre>")
+    for m in maquinas:
+        m['cmds'] = form.getlist(m['ip'])
+
+        # Cria um socket TCP/IP
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Conecta o socket à porta que a máquina está escutando
+        print("Conectando-me a {} na porta {}".format(m['ip'], m['porta']))
+        server_address = (m['ip'], m['porta'])
+        sock.connect(server_address)
+
+        m['respostas'] = []
+        for cmd in m['cmds']:
+            try:
+                # Envia
+                print("Enviando `{}` para {}".format(cmd, m['ip']))
+                sock.sendall(cmd)
+
+                # Recebe
+                resposta = sock.recv(65536)
+                m['respostas'].append(resposta)
+                print('Recebi: {}'.format(resposta))
+            finally:
+                print('Fechando socket')
+                sock.close()
+    print("</pre>")
 
 
 serve_template('index.mako',
