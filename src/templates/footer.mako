@@ -12,6 +12,6 @@
 </div>
 
 <div class="license" id="licence">
-<p>${autores}</p>
+<p>Autores: ${autores}</p>
 </div>
 </%block>

@@ -5,7 +5,7 @@
     <%block name="head">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Titulo</title>
+        <title>Projeto 1-Redes de Computadores</title>
         <link rel="shortcut icon" href="" type="image/x-icon" />
 
         <%block name="stylesheet">

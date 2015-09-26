@@ -5,7 +5,7 @@
 </%block>
 
 <%block name="title">
-    Projeto 1
+    Projeto 1 - Redes de Computadores
 </%block>
 
 <%block name="content">
