@@ -19,22 +19,19 @@ import socket
 from view import serve_template
 from settings import maquinas
 
-
 __authors__ = (
-        'Christian Rollmann',
-        'Isaac Mitsuaki Saito',
-        'Julio Batista Silva',
-        'Marcelo Fernandes Tedeschi',)
+    'Christian Rollmann',
+    'Isaac Mitsuaki Saito',
+    'Julio Batista Silva',
+    'Marcelo Fernandes Tedeschi',)
 __license__ = "GPL"
 __version__ = "1.0"
-
 
 cgitb.enable()
 
 
 # CGI header
 print("Content-type: text/html\n\n")
-
 
 respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 
@@ -70,7 +67,6 @@ if respostas:
                 print('Fechando socket')
                 sock.close()
     print("</pre>")
-
 
 serve_template('index.mako',
                autores=", ".join(__authors__),

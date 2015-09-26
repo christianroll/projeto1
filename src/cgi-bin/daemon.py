@@ -6,7 +6,6 @@
 Daemon
 """
 
-
 from __future__ import division
 from __future__ import print_function
 
@@ -14,12 +13,11 @@ import socket
 from subprocess import check_output
 from subprocess import STDOUT
 
-
 __authors__ = (
-        'Christian Rollmann',
-        'Isaac Mitsuaki Saito',
-        'Julio Batista Silva',
-        'Marcelo Fernandes Tedeschi',)
+    'Christian Rollmann',
+    'Isaac Mitsuaki Saito',
+    'Julio Batista Silva',
+    'Marcelo Fernandes Tedeschi',)
 __license__ = "GPL v3"
 __version__ = "1.0"
 
@@ -40,7 +38,6 @@ sock.bind(server_address)
 
 # Fica na escuta aguardando conexões
 sock.listen(1)
-
 
 while True:
     connection, client_address = sock.accept()
