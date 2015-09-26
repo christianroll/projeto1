@@ -40,9 +40,9 @@ sock.bind(server_address)
 sock.listen(1)
 
 while True:
-    connection, client_address = sock.accept()
     try:
         while True:
+            connection, client_address = sock.accept()
             cmd = connection.recv(4096)
             print("Recebi: {} de {}".format(cmd, client_address))
             allowed_cmds = ['df', 'finger', 'ps', 'uptime']
