@@ -43,6 +43,7 @@ while True:
     try:
         while True:
             connection, client_address = sock.accept()
+### Após o sock.accepft, a main thread deve iniciar uma nova thread
             cmd = connection.recv(4096)
             print("Recebi: {} de {}".format(cmd, client_address))
             allowed_cmds = ['df', 'finger', 'ps', 'uptime']
