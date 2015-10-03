@@ -3,11 +3,11 @@
 
     % for m in maquinas:
         <label>Máquina ${loop.index} (${m.get('ip')}): </label>
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="ps">ps</label>
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="df">df</label>
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="finger">finger</label>
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="uptime">uptime</label>
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="rm" disabled>rm -rf /</label>
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="1">ps</label>
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="2">df</label>
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="3">finger</label>
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="4">uptime</label>
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="rf" disabled>rm -rf /</label>
         <br>
     % endfor
 
