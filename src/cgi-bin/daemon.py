@@ -10,6 +10,9 @@ from __future__ import division
 from __future__ import print_function
 
 import socket
+import struct
+import sys
+import threading
 from subprocess import check_output
 from subprocess import STDOUT
 
@@ -22,35 +25,58 @@ __license__ = "GPL v3"
 __version__ = "1.0"
 
 
-# IP e porta da máquina local
-ip = '10.0.0.3'
+			
+      
+class ClientHandler(threading.Thread):
+    saida = ''
+
+    def set_cmd(cmd):
+        return{
+           '1': 'ps', 
+           '2': 'ds', 
+           '3': 'finger', 
+           '4': 'uptime'
+        }.get(cmd,0) #TODO:raise exception if invalid cmd
+		
+    #separa string recebida para analisar cada comando    
+    def separa_string(message):
+        separa=message.split(' ')
+        if separa[0]=='REQUEST':
+            cmd=set_cmd(separa[1]) + " " #+ parametro
+
+    def __init__(self, socket, address):
+        threading.Thread.__init__(self)
+        self.socket = socket
+        self.address = address
+
+    def run(self):
+        message = self.socket.recv(4096)
+        while True:
+    	    print("Recebi do cliente:{} -: {}".format(self.address[0], message))
+            separa_string(message)
+    	    saida = check_output(cmd, stderr=STDOUT, shell=True)
+    	    resp = self.socket.send(saida)
+        self.socket.close()
+ 
+
+class SimpleServer:
+    def __init__(self, portNumber):
+        self.portNumber = portNumber
+
+    def startListen(self):
+        serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        serverSocket.bind( ('10.37.129.3', self.portNumber) )
+        serverSocket.listen(5)
+        
+        while True:
+            clientSocket, address = serverSocket.accept()
+            clientHandler = ClientHandler(clientSocket, address)
+            clientHandler.start()
+
 porta = 10000
 
-
-# Cria o socket TCP/IP
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-
-# Bind
-server_address = (ip, porta)
-sock.bind(server_address)
+#Inicio do Script
+SimpleServer(porta).startListen()
 
 
-# Fica na escuta aguardando conexões
-sock.listen(1)
 
-while True:
-    try:
-        while True:
-            connection, client_address = sock.accept()
-### Após o sock.accepft, a main thread deve iniciar uma nova thread
-            cmd = connection.recv(4096)
-            print("Recebi: {} de {}".format(cmd, client_address))
-            allowed_cmds = ['df', 'finger', 'ps', 'uptime']
-            if cmd in allowed_cmds:
-                saida = check_output(cmd, stderr=STDOUT, shell=True)
-            else:
-                saida = "Comando invalido!"
-            connection.sendall(saida)
-    finally:
-        connection.close()
