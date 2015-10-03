@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 
 import cgi
 import cgitb
-import struct
 
 import os
 import socket
@@ -27,29 +26,6 @@ __authors__ = (
     'Marcelo Fernandes Tedeschi',)
 __license__ = "GPL"
 __version__ = "1.0"
-
-def send_one_message(sock, data):
-    length = len(data)
-    sock.sendall(struct.pack('<H', length))
-    sock.sendall(data)
-
-def recv_one_message(sock):
-    lengthbuf = recvall(sock, 4)
-    length, = struct.unpack('<H', lengthbuf)
-    return recvall(sock, length)
-
-
-def recvall(sock, count):
-    buf = b''
-    while count:
-        newbuf = sock.recv(count)
-        if not newbuf: return None
-        buf += newbuf
-        count -= len(newbuf)
-    return buf
-
-
-
 
 cgitb.enable()
 
@@ -81,9 +57,9 @@ if respostas:
             try:
                 # Envia
                 print("Enviando `{}` para {}".format(cmd, m['ip']))
-                send_one_message(sock, cmd)
+                sock.sendall(cmd)
                 # Recebe
-                resposta = recv_one_message(sock)
+                resposta = sock.recv(65536)
                 m['respostas'].append(resposta)
                 print('Recebi: {}'.format(resposta))
             finally:
