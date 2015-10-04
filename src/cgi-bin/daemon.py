@@ -43,6 +43,7 @@ class ClientHandler(threading.Thread):
     def run(self):
         while True:
             message = self.socket.recv(2 ** 16).decode()
+            message = re.sub(r"\r\n", "", message)
 
             if not message:
                 print("Empty message. Fechando o socket")
@@ -50,13 +51,16 @@ class ClientHandler(threading.Thread):
                 break
 
             print("Recebi de '{}': '{}'".format(self.address[0], message))
-            tipo, cmd, arg = message.split(' ', 2)
+            try:
+                tipo, cmd, arg = message.split(' ', 2)
+            except:
+                tipo, cmd = message.split(' ')
+                arg = ''
             print("Tipo: '{}', cmd: '{}', arg: '{}'".format(tipo, cmd, arg))
 
             if tipo == 'REQUEST':
                 full_cmd = cmd_name(cmd)
                 if arg:
-                    arg = re.sub(r"\r\n", "", arg)
                     full_cmd += " " + self.clean_arg(arg)
                 print("Rodando: `{}`".format(full_cmd))
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
