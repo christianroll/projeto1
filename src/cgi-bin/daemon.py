@@ -14,7 +14,7 @@ import sys
 import socket
 import threading
 import argparse
-from subprocess import check_output, STDOUT
+from subprocess import check_output, STDOUT, CalledProcessError
 from unidecode import unidecode
 
 from util import get_host_ip, cmd_name
@@ -63,7 +63,10 @@ class ClientHandler(threading.Thread):
                 if arg:
                     full_cmd += " " + self.clean_arg(arg)
                 print("Rodando: `{}`".format(full_cmd))
-                saida = check_output(full_cmd, stderr=STDOUT, shell=True)
+                try:
+                    saida = check_output(full_cmd, stderr=STDOUT, shell=True)
+                except CalledProcessError, e:
+                    saida = e.output
                 header = unidecode("RESPONSE " + cmd + " " + saida)
                 print("Enviando `{}` para {}".format(header, self.address[0]))
                 self.socket.sendall(header.encode())
