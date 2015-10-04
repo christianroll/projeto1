@@ -25,6 +25,25 @@ A aplicação é formada pelas seguintes partes:
 *   [Mako Templates for Python](http://www.makotemplates.org/)
 
 
+### Apache no OS X
+
+Descomente as seguintes linhas em `/etc/apache2/httpd.conf`:
+
+    LoadModule authz_core_module libexec/apache2/mod_authz_core.so
+    LoadModule authz_host_module libexec/apache2/mod_authz_host.so
+    LoadModule rewrite_module libexec/apache2/mod_rewrite.so
+    LoadModule cgi_module libexec/apache2/mod_cgi.so
+
+
+Reinicie o Apache com `sudo apachectl restart`
+
+
+### Ubuntu
+    $ sudo apt-get install python-pip python-dev build-essential 
+    $ sudo pip install --upgrade pip 
+    $ pip install netifaces mako
+
+
 ## Alunos
 
 *   [Christian Rollmann (414514)](https://github.com/christianroll)
