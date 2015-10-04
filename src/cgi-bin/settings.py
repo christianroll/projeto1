@@ -6,9 +6,14 @@
 Cadastro manual das máquinas
 """
 
+from random import randint
+
+grupo = randint(1, 8)
+porta = 9000 + grupo
+
 maquinas = [
-    {'hostname': "Christian", 'ip': "192.168.56.101", 'porta': 10000},
-    {'hostname': "Isaac", 'ip': "192.168.56.102", 'porta': 10000},
-#    {'hostname': "Julio", 'ip': "10.0.0.3", 'porta': 10000},
-#    {'hostname': "Marcelo", 'ip': "10.0.0.4", 'porta': 10000},
+    {'hostname': "Christian",   'ip': "10.0.0.1", 'porta': porta},
+    {'hostname': "Isaac",       'ip': "10.0.0.2", 'porta': porta},
+    {'hostname': "Julio",       'ip': "10.0.0.3", 'porta': porta},
+    {'hostname': "Marcelo",     'ip': "10.0.0.4", 'porta': porta},
 ]
