@@ -36,7 +36,7 @@ class ClientHandler(threading.Thread):
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
-        whitelist = '[^A-Za-z0-9\s.,\-\_\=]+'
+        whitelist = '[^A-Za-z0-9 .,\-\_\=]+'
         return re.sub(whitelist, '', message)
 
     def run(self):
