@@ -27,6 +27,7 @@ __authors__ = (
 __license__ = "GPL"
 __version__ = "1.0"
 
+
 cgitb.enable()
 
 
@@ -51,13 +52,18 @@ if respostas:
         print("Conectando-me a {} na porta {}".format(m['ip'], m['porta']))
         server_address = (m['ip'], m['porta'])
         sock.connect(server_address)
+        print("Conectou a {} na porta {}".format(m['ip'], m['porta']))
 
         m['respostas'] = []
         for cmd in m['cmds']:
+            arg = form.getfirst(m['ip'] + "_arg" + str(cmd))
+            print("cmd = '{}'; arg: '{}'".format(cmd, arg))
+
             try:
                 # Envia
-                print("Enviando `{}` para {}".format(cmd, m['ip']))
-                sock.sendall(cmd)
+                header = "REQUEST " + cmd + " " + arg
+                print("Enviando `{}` para {}:{}".format(header, m['ip'], m['porta']))
+                sock.sendall(header)
                 # Recebe
                 resposta = sock.recv(65536)
                 m['respostas'].append(resposta)
