@@ -20,7 +20,7 @@ from unidecode import unidecode
 
 from view import serve_template
 from settings import maquinas
-from util import cmd_name
+from util import cmd_name, comandos
 
 __authors__ = (
     'Christian Rollmann',
@@ -80,4 +80,5 @@ if respostas:
 serve_template('index.mako',
                autores=", ".join(__authors__),
                maquinas=maquinas,
+               comandos=comandos,
                respostas=respostas)

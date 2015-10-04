@@ -20,6 +20,14 @@ __license__ = "GPL v3"
 __version__ = "1.0"
 
 
+comandos = [
+            {'num': '1', 'nome': 'ps'},
+            {'num': '2', 'nome': 'df'},
+            {'num': '3', 'nome': 'finger'},
+            {'num': '4', 'nome': 'uptime'},
+           ]
+
+
 # Get command name from it's number
 def cmd_name(cmd):
     return{

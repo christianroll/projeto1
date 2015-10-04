@@ -2,18 +2,11 @@
 <form class="well" name="comandos" method="post" action="webserver.py">
 
     % for m in maquinas:
-        <label>Máquina ${loop.index} (${m.get('ip')}): </label>
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="1">ps</label>
-        <input type="text" name="${m.get('ip')}_arg1" maxlength="256" pattern="[^|;<>&]+">
-
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="2">df</label>
-        <input type="text" name="${m.get('ip')}_arg2" maxlength="256" pattern="[^|;<>&]+">
-
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="3">finger</label>
-        <input type="text" name="${m.get('ip')}_arg3" maxlength="256" pattern="[^|;<>&]+">
-
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="4">uptime</label>
-        <input type="text" name="${m.get('ip')}_arg4" maxlength="256" pattern="[^|;<>&]+">
+        <label>Máquina ${loop.index + 1} (${m.get('ip')}): </label>
+        %for cmd in comandos:
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="${cmd.get('num')}">${cmd.get('nome')}</label>
+        <input type="text" name="${m.get('ip')}_arg${cmd.get('num')}" maxlength="256" pattern="[^|;<>&]+">
+        % endfor
         <br>
     % endfor
 
