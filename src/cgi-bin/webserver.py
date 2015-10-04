@@ -16,6 +16,8 @@ import cgitb
 import os
 import socket
 
+from unidecode import unidecode
+
 from view import serve_template
 from settings import maquinas
 
@@ -61,7 +63,7 @@ if respostas:
 
             try:
                 # Envia
-                header = "REQUEST " + cmd + " " + arg
+                header = unidecode("REQUEST " + cmd + " " + arg)
                 print("Enviando `{}` para {}:{}".format(header, m['ip'], m['porta']))
                 sock.sendall(header)
                 # Recebe

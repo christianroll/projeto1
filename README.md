@@ -23,6 +23,7 @@ A aplicação é formada pelas seguintes partes:
 *   [Apache HTTP Server](https://httpd.apache.org/)
 *   [Python 2.7](https://www.python.org/)
 *   [Mako Templates for Python](http://www.makotemplates.org/)
+*   [Unidecode](https://pypi.python.org/pypi/Unidecode)
 
 
 ### Apache no OS X
@@ -41,7 +42,7 @@ Reinicie o Apache com `sudo apachectl restart`
 ### Ubuntu
     $ sudo apt-get install python-pip python-dev build-essential 
     $ sudo pip install --upgrade pip 
-    $ pip install netifaces mako
+    $ pip install netifaces mako unidecode
 
 
 ## Alunos

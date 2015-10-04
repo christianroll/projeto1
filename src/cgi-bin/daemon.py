@@ -14,6 +14,7 @@ import socket
 import threading
 import argparse
 from subprocess import check_output, STDOUT
+from unidecode import unidecode
 
 from network_tools import get_host_ip
 
@@ -50,6 +51,7 @@ class ClientHandler(threading.Thread):
         else:
             return message
 
+
     def run(self):
         while True:
             message = self.socket.recv(2**16)
@@ -70,7 +72,7 @@ class ClientHandler(threading.Thread):
                     full_cmd += " " + self.clean_arg(arg)
 
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
-                header = "RESPONSE " + cmd + " " + saida
+                header = unidecode("RESPONSE " + cmd + " " + saida)
                 print("Enviando `{}` para {}".format(header, self.address[0]))
                 self.socket.sendall(header)
 
