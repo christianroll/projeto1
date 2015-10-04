@@ -111,7 +111,7 @@ if __name__ == "__main__":
     host = get_host_ip()[-1]
     parser = argparse.ArgumentParser(description='Daemon.')
     parser.add_argument('--host', default=host, help='Daemon IP address')
-    parser.add_argument('-p', '--port', type=int, default=10000, help='Port')
+    parser.add_argument('-p', '--port', type=int, default=9001, help='Port')
     args = parser.parse_args()
 
     sys.exit(main(args))
