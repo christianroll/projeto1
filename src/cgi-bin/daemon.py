@@ -16,7 +16,7 @@ import argparse
 from subprocess import check_output, STDOUT
 from unidecode import unidecode
 
-from network_tools import get_host_ip
+from util import get_host_ip, cmd_name
 
 
 __authors__ = (
@@ -34,14 +34,6 @@ class ClientHandler(threading.Thread):
         threading.Thread.__init__(self)
         self.socket = socket
         self.address = address
-
-    def cmd_name(self, cmd):
-        return{
-           '1': 'ps',
-           '2': 'df',
-           '3': 'finger',
-           '4': 'uptime'
-        }.get(cmd, '')  # TODO:raise exception if invalid cmd
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
@@ -66,7 +58,7 @@ class ClientHandler(threading.Thread):
             print("Tipo: '{}', cmd: '{}', arg: '{}'".format(tipo, cmd, arg))
 
             if tipo == 'REQUEST':
-                full_cmd = self.cmd_name(cmd)
+                full_cmd = cmd_name(cmd)
 
                 if arg:
                     full_cmd += " " + self.clean_arg(arg)
