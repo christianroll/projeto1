@@ -56,6 +56,7 @@ class ClientHandler(threading.Thread):
             if tipo == 'REQUEST':
                 full_cmd = cmd_name(cmd)
                 if arg:
+                    arg = re.sub(r"\r\n", "", arg)
                     full_cmd += " " + self.clean_arg(arg)
                 print("Rodando: `{}`".format(full_cmd))
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
