@@ -12,8 +12,11 @@ from __future__ import print_function
 import sys
 import socket
 import threading
-from subprocess import check_output
-from subprocess import STDOUT
+import argparse
+from subprocess import check_output, STDOUT
+
+from network_tools import get_host_ip
+
 
 __authors__ = (
     'Christian Rollmann',
@@ -39,7 +42,7 @@ class ClientHandler(threading.Thread):
            '4': 'uptime'
         }.get(cmd, '')  # TODO:raise exception if invalid cmd
 
-    # TODO: Clean arguments to make the command safe
+    # Clean arguments to make the command safe
     def clean_arg(self, message):
         malicious = set('^|;<>&')
         if any((c in malicious) for c in message):
@@ -52,8 +55,8 @@ class ClientHandler(threading.Thread):
             message = self.socket.recv(2**16)
 
             if not message:
-                self.server.close()
                 print("Empty message. Fechando o socket")
+                self.socket.close()
                 break
 
             print("Recebi de '{}': '{}'".format(self.address[0], message))
@@ -68,11 +71,11 @@ class ClientHandler(threading.Thread):
 
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
                 header = "RESPONSE " + cmd + " " + saida
-                print("Enviando `{}` para {}:{}".format(header, self.address[0], self.address[1]))
+                print("Enviando `{}` para {}".format(header, self.address[0]))
                 self.socket.sendall(header)
 
 
-class SimpleServer:
+class Server:
     def __init__(self, address):
         self.host = address[0]
         self.port = address[1]
@@ -80,6 +83,7 @@ class SimpleServer:
 
     def open_socket(self):
         try:
+            print("Opening '{}':'{}'".format(self.host, self.port))
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((self.host, self.port))
             self.server.listen(5)
@@ -89,14 +93,25 @@ class SimpleServer:
             print("Socket could not be opened: {}".format(message))
             sys.exit(1)
 
-    def startListen(self):
+    def start_listen(self):
         self.open_socket()
         while True:
             clientHandler = ClientHandler(self.server.accept())
             clientHandler.start()
+        self.server.close()
 
 
-address = ('10.0.0.6', 10000)
+def main(args):
+    address = (args.host, args.port)
+    Server(address).start_listen()
+    return 0
 
-# Inicio do Script
-SimpleServer(address).startListen()
+
+if __name__ == "__main__":
+    host = get_host_ip()[-1]
+    parser = argparse.ArgumentParser(description='Daemon.')
+    parser.add_argument('--host', default=host, help='Daemon IP address')
+    parser.add_argument('-p', '--port', type=int, default=10000, help='Port')
+    args = parser.parse_args()
+
+    sys.exit(main(args))
