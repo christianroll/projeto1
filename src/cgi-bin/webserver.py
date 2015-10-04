@@ -45,22 +45,21 @@ if respostas:
     print("<pre>")
     for m in maquinas:
         m['cmds'] = form.getlist(m['ip'])
-
-        # Cria um socket TCP/IP
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        # Conecta o socket à porta que a máquina está escutando
-        print("Conectando-me a {} na porta {}".format(m['ip'], m['porta']))
-        server_address = (m['ip'], m['porta'])
-        sock.connect(server_address)
-        print("Conectou a {} na porta {}".format(m['ip'], m['porta']))
-
         m['respostas'] = []
         for cmd in m['cmds']:
             arg = form.getfirst(m['ip'] + "_arg" + str(cmd))
             print("cmd = '{}'; arg: '{}'".format(cmd, arg))
 
             try:
+                # Cria um socket TCP/IP
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+                # Conecta o socket à porta que a máquina está escutando
+                print("Conectando-me a {} na porta {}".format(m['ip'], m['porta']))
+                server_address = (m['ip'], m['porta'])
+                sock.connect(server_address)
+                print("Conectou a {} na porta {}".format(m['ip'], m['porta']))
+
                 if arg is None:
                     arg = ''
                 header = unidecode("REQUEST " + cmd + " " + arg)
