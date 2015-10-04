@@ -53,7 +53,6 @@ if respostas:
             try:
                 # Cria um socket TCP/IP
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
                 # Conecta o socket à porta que a máquina está escutando
                 print("Conectando-me a {} na porta {}".format(m['ip'], m['porta']))
                 server_address = (m['ip'], m['porta'])
@@ -69,7 +68,7 @@ if respostas:
                 resposta = sock.recv(65536).decode()
                 print('Recebi: {}'.format(resposta))
                 cmd, saida = resposta.split(None, 2)[1:]
-                m['respostas'].append((cmd_name(cmd), saida))
+                m['respostas'].append(("Maquina: " + m['ip'] + ", Comando: " + cmd_name(cmd), saida))
             finally:
                 print('Fechando socket')
                 sock.close()
