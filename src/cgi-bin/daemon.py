@@ -27,8 +27,6 @@ __authors__ = (
 __license__ = "GPL v3"
 __version__ = "1.0"
 
-__whitelist__ = '[^A-Za-z0-9\s.,\-\_\=]+'
-
 
 class ClientHandler(threading.Thread):
     def __init__(self, (socket, address)):
@@ -38,7 +36,8 @@ class ClientHandler(threading.Thread):
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
-        return re.sub(__whitelist__, '', message)
+        whitelist = '[^A-Za-z0-9\s.,\-\_\=]+'
+        return re.sub(whitelist, '', message)
 
     def run(self):
         while True:
