@@ -6,9 +6,7 @@
 Cadastro manual das máquinas
 """
 
-from random import randint
-
-grupo = randint(1, 8)
+grupo = 1
 porta = 9000 + grupo
 
 maquinas = [
