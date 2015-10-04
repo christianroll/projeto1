@@ -20,6 +20,7 @@ from unidecode import unidecode
 
 from view import serve_template
 from settings import maquinas
+from util import cmd_name
 
 __authors__ = (
     'Christian Rollmann',
@@ -68,8 +69,9 @@ if respostas:
                 sock.sendall(header)
                 # Recebe
                 resposta = sock.recv(65536)
-                m['respostas'].append(resposta)
                 print('Recebi: {}'.format(resposta))
+                cmd, saida = resposta.split(None, 2)[1:]
+                m['respostas'].append((cmd_name(cmd), saida))
             finally:
                 print('Fechando socket')
                 sock.close()
