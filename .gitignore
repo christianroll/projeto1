@@ -63,3 +63,6 @@ target/
 # IDEA
 .idea
 
+
+# Temporario, arquivo de conf..
+src/cgi-bin/settings.py
