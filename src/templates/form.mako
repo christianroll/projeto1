@@ -4,8 +4,8 @@
     % for m in maquinas:
         <label>Máquina ${loop.index + 1} (${m.get('ip')}): </label>
         %for cmd in comandos:
-        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="${cmd.get('num')}">${cmd.get('nome')}</label>
-        <input type="text" name="${m.get('ip')}_arg${cmd.get('num')}" maxlength="256" pattern="[^|;<>&]+">
+        <label class="checkbox-inline"><input type="checkbox" name="${m.get('ip')}" value="${cmd}">${comandos.get(cmd)}</label>
+        <input type="text" name="${m.get('ip')}_arg${cmd}" maxlength="256" pattern="[^|;<>&]+">
         % endfor
         <br>
     % endfor

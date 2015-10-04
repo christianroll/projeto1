@@ -20,22 +20,16 @@ __license__ = "GPL v3"
 __version__ = "1.0"
 
 
-comandos = [
-            {'num': '1', 'nome': 'ps'},
-            {'num': '2', 'nome': 'df'},
-            {'num': '3', 'nome': 'finger'},
-            {'num': '4', 'nome': 'uptime'},
-           ]
-
+comandos = {
+            '1': 'ps',
+            '2': 'df',
+            '3': 'finger',
+            '4': 'uptime'
+           }
 
 # Get command name from it's number
 def cmd_name(cmd):
-    return{
-       '1': 'ps',
-       '2': 'df',
-       '3': 'finger',
-       '4': 'uptime'
-    }.get(cmd, '')  # TODO:raise exception if invalid cmd
+    return comandos.get(cmd, '')  # TODO:raise exception if invalid cmd
 
 
 # Returns a list with all localhost IPs. Needs netifaces
