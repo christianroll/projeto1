@@ -33,6 +33,9 @@ __version__ = "1.0"
 
 cgitb.enable()
 
+def __unicode__(self):
+    return unicode(self.some_field) or u''
+
 
 # CGI header
 print("Content-type: text/html\n\n")
@@ -63,7 +66,8 @@ if respostas:
             print("cmd = '{}'; arg: '{}'".format(cmd, arg))
 
             try:
-                # Envia
+                if arg is None:
+                    arg = ''
                 header = unidecode("REQUEST " + cmd + " " + arg)
                 print("Enviando `{}` para {}:{}".format(header, m['ip'], m['porta']))
                 sock.sendall(header.encode())
