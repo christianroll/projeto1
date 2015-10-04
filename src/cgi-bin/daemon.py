@@ -37,11 +37,16 @@ class ClientHandler(threading.Thread):
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
+        try:
+            from shlex import quote as cmd_quote # Python 3.3
+        except ImportError:
+            from pipes import quote as cmd_quote
+
         malicious = set('^|;<>&')
         if any((c in malicious) for c in message):
             return ''
         else:
-            return message
+            return cmd_quote(message)
 
 
     def run(self):
@@ -63,6 +68,7 @@ class ClientHandler(threading.Thread):
                 if arg:
                     full_cmd += " " + self.clean_arg(arg)
 
+                print("Rodando: `{}`".format(full_cmd))
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
                 header = unidecode("RESPONSE " + cmd + " " + saida)
                 print("Enviando `{}` para {}".format(header, self.address[0]))
