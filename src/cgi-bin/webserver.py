@@ -66,9 +66,9 @@ if respostas:
                 # Envia
                 header = unidecode("REQUEST " + cmd + " " + arg)
                 print("Enviando `{}` para {}:{}".format(header, m['ip'], m['porta']))
-                sock.sendall(header)
+                sock.sendall(header.encode())
                 # Recebe
-                resposta = sock.recv(65536)
+                resposta = sock.recv(65536).decode()
                 print('Recebi: {}'.format(resposta))
                 cmd, saida = resposta.split(None, 2)[1:]
                 m['respostas'].append((cmd_name(cmd), saida))

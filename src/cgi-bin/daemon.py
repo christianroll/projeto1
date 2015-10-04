@@ -51,7 +51,7 @@ class ClientHandler(threading.Thread):
 
     def run(self):
         while True:
-            message = self.socket.recv(2**16)
+            message = self.socket.recv(2**16).decode()
 
             if not message:
                 print("Empty message. Fechando o socket")
@@ -72,7 +72,7 @@ class ClientHandler(threading.Thread):
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
                 header = unidecode("RESPONSE " + cmd + " " + saida)
                 print("Enviando `{}` para {}".format(header, self.address[0]))
-                self.socket.sendall(header)
+                self.socket.sendall(header.encode())
 
 
 class Server:
