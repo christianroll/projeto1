@@ -6,10 +6,8 @@
 Useful tools
 """
 
-
 from __future__ import division
 from __future__ import print_function
-
 
 __authors__ = (
     'Christian Rollmann',
@@ -19,13 +17,13 @@ __authors__ = (
 __license__ = "GPL v3"
 __version__ = "1.0"
 
-
 comandos = {
-            '1': 'ps',
-            '2': 'df',
-            '3': 'finger',
-            '4': 'uptime'
-           }
+    '1': 'ps',
+    '2': 'df',
+    '3': 'finger',
+    '4': 'uptime'
+}
+
 
 # Get command name from it's number
 def cmd_name(cmd):

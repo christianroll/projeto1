@@ -19,7 +19,6 @@ from unidecode import unidecode
 
 from util import get_host_ip, cmd_name
 
-
 __authors__ = (
     'Christian Rollmann',
     'Isaac Mitsuaki Saito',
@@ -28,11 +27,10 @@ __authors__ = (
 __license__ = "GPL v3"
 __version__ = "1.0"
 
+__whitelist__ = '[^A-Za-z0-9\s.,\-\_\=]+'
 
-__whiltelist__ = '[^A-Za-z0-9\s.,\-\_\=]+'
 
 class ClientHandler(threading.Thread):
-
     def __init__(self, (socket, address)):
         threading.Thread.__init__(self)
         self.socket = socket
@@ -40,22 +38,11 @@ class ClientHandler(threading.Thread):
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
-        return re.sub(__whiltelist__, '', message)
-        # try:
-        #     from shlex import quote as cmd_quote # Python 3.3
-        # except ImportError:
-        #     from pipes import quote as cmd_quote
-        #
-        # malicious = set('^|;<>&')
-        # if any((c in malicious) for c in message):
-        #     return ''
-        # else:
-        #     return cmd_quote(message)
-
+        return re.sub(__whitelist__, '', message)
 
     def run(self):
         while True:
-            message = self.socket.recv(2**16).decode()
+            message = self.socket.recv(2 ** 16).decode()
 
             if not message:
                 print("Empty message. Fechando o socket")
@@ -68,10 +55,8 @@ class ClientHandler(threading.Thread):
 
             if tipo == 'REQUEST':
                 full_cmd = cmd_name(cmd)
-
                 if arg:
                     full_cmd += " " + self.clean_arg(arg)
-
                 print("Rodando: `{}`".format(full_cmd))
                 saida = check_output(full_cmd, stderr=STDOUT, shell=True)
                 header = unidecode("RESPONSE " + cmd + " " + saida)
