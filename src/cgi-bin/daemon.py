@@ -9,6 +9,7 @@ Daemon
 from __future__ import division
 from __future__ import print_function
 
+import re
 import sys
 import socket
 import threading
@@ -28,6 +29,8 @@ __license__ = "GPL v3"
 __version__ = "1.0"
 
 
+__whiltelist__ = '[^A-Za-z0-9\s.,\-\_\=]+'
+
 class ClientHandler(threading.Thread):
 
     def __init__(self, (socket, address)):
@@ -37,16 +40,17 @@ class ClientHandler(threading.Thread):
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
-        try:
-            from shlex import quote as cmd_quote # Python 3.3
-        except ImportError:
-            from pipes import quote as cmd_quote
-
-        malicious = set('^|;<>&')
-        if any((c in malicious) for c in message):
-            return ''
-        else:
-            return cmd_quote(message)
+        return re.sub(__whiltelist__, '', message)
+        # try:
+        #     from shlex import quote as cmd_quote # Python 3.3
+        # except ImportError:
+        #     from pipes import quote as cmd_quote
+        #
+        # malicious = set('^|;<>&')
+        # if any((c in malicious) for c in message):
+        #     return ''
+        # else:
+        #     return cmd_quote(message)
 
 
     def run(self):

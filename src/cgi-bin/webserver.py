@@ -30,12 +30,7 @@ __authors__ = (
 __license__ = "GPL"
 __version__ = "1.0"
 
-
 cgitb.enable()
-
-def __unicode__(self):
-    return unicode(self.some_field) or u''
-
 
 # CGI header
 print("Content-type: text/html\n\n")
