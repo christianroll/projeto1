@@ -40,31 +40,27 @@ DEBUG = ''
 
 respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 
+
 class ConnectionThread(threading.Thread):
     def __init__(self, m, index, queue):
-        #print("Nova Thread")
+        # print("Nova Thread")
         threading.Thread.__init__(self)
         self.m = m
         self.q = queue
         self.index = index
 
-
-        
     def run(self):
-
         d = {}
         d['ip'] = self.m['ip']
         d['index'] = self.index
         d['respostas'] = []
 
-
         # Envia os comandos para cada uma das máquinas e espera resposta
         for cmd in self.m['cmds']:
             arg = form.getfirst(self.m['ip'] + "_arg" + str(cmd))
-            
-            #print(self.m['ip'])
-            #print(self.m['porta'])
 
+            # print(self.m['ip'])
+            # print(self.m['porta'])
 
             try:
                 # Cria um socket TCP/IP
@@ -74,7 +70,7 @@ class ConnectionThread(threading.Thread):
                 server_address = (self.m['ip'], self.m['porta'])
 
                 sock.connect(server_address)
-                # DEBUG += "Conectou a {} na porta {}\n".format(m['ip'], m['porta'])    
+                # DEBUG += "Conectou a {} na porta {}\n".format(m['ip'], m['porta'])
                 if arg is None:
                     arg = ''
                 header = "REQUEST " + cmd + " " + arg
@@ -88,11 +84,12 @@ class ConnectionThread(threading.Thread):
 
                 except:
                     # TODO: FIXME
-                    #cmd = resposta.split(None, 2)[1]
+                    # cmd = resposta.split(None, 2)[1]
                     cmd = ''
                     saida = ''
 
-                d['respostas'].append(["Maquina: "+self.m['ip']+", Comando: " + cmd_name(cmd), saida])
+                d['respostas'].append(["Maquina: " + self.m['ip'] +
+                                       ", Comando: " + cmd_name(cmd), saida])
 
             finally:
                 # DEBUG += 'Fechando socket\n'
@@ -121,19 +118,7 @@ if respostas:
     while not queue.empty():
         rsp = queue.get()
         maquinas[rsp['index']]['respostas'] = rsp['respostas']
-        
 
-
-
-
-
-    
-
-
-
-
-
-            
 
 serve_template('index.mako',
                autores=", ".join(__authors__),
