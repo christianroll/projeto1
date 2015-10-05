@@ -12,11 +12,9 @@ from __future__ import unicode_literals
 
 import cgi
 import cgitb
-import threading
+
 import os
 import socket
-import Queue
-import pprint
 
 from unidecode import unidecode
 
@@ -38,103 +36,51 @@ cgitb.enable()
 print("Content-type: text/html\n\n")
 
 DEBUG = ''
-
 respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 
-class ConnectionThread(threading.Thread):
-    def __init__(self, m, index, queue):
-        #print("Nova Thread")
-        threading.Thread.__init__(self)
-        self.m = m
-        self.q = queue
-        self.index = index
 
-
-        
-    def run(self):
-
-        d = {}
-        d['ip'] = self.m['ip']
-        d['index'] = self.index
-        d['respostas'] = []
-
-
-        # Envia os comandos para cada uma das máquinas e espera resposta
-        for cmd in self.m['cmds']:
-            arg = form.getfirst(self.m['ip'] + "_arg" + str(cmd))
-            
-            #print(self.m['ip'])
-            #print(self.m['porta'])
-
+# "Backend". Executado após form ser submetido.
+if respostas:
+    form = cgi.FieldStorage()
+    # Envia os comandos para cada uma das máquinas e espera resposta
+    for m in maquinas:
+        m['cmds'] = form.getlist(m['ip'])
+        m['respostas'] = []
+        for cmd in m['cmds']:
+            arg = form.getfirst(m['ip'] + "_arg" + str(cmd))
+            DEBUG += "cmd = '{}'; arg: '{}'\n".format(cmd, arg)
 
             try:
                 # Cria um socket TCP/IP
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 # Conecta o socket à porta que a máquina está escutando
-                # DEBUG += "Conectando-me a {} na porta {}\n".format(m['ip'], m['porta'])
-                server_address = (self.m['ip'], self.m['porta'])
-
+                DEBUG += "Conectando-me a {} na porta {}\n".format(m['ip'], m['porta'])
+                server_address = (m['ip'], m['porta'])
                 sock.connect(server_address)
-                # DEBUG += "Conectou a {} na porta {}\n".format(m['ip'], m['porta'])    
+                DEBUG += "Conectou a {} na porta {}\n".format(m['ip'], m['porta'])
+
                 if arg is None:
                     arg = ''
                 header = "REQUEST " + cmd + " " + arg
-
+                DEBUG += "Enviando `{}` para {}:{}\n".format(header, m['ip'], m['porta'])
                 sock.sendall(unidecode(header.decode()))
                 # Recebe
                 resposta = sock.recv(65536)
+                DEBUG += 'Recebi: {}\n'.format(resposta)
 
                 try:
                     cmd, saida = resposta.split(None, 2)[1:]
-
                 except:
                     # TODO: FIXME
                     #cmd = resposta.split(None, 2)[1]
                     cmd = ''
                     saida = ''
 
-                d['respostas'].append(["Maquina: "+self.m['ip']+", Comando: " + cmd_name(cmd), saida])
-
+                m['respostas'].append(("Maquina: " + m['ip'] + ", Comando: " + cmd_name(cmd), saida))
             finally:
-                # DEBUG += 'Fechando socket\n'
+                DEBUG += 'Fechando socket\n'
                 sock.close()
-        self.q.put(d)
 
-
-# "Backend". Executado após form ser submetido.
-
-if respostas:
-
-    queue = Queue.Queue()
-
-    form = cgi.FieldStorage()
-
-    threads = []
-    for (index, m) in enumerate(maquinas):
-        m['cmds'] = form.getlist(m['ip'])
-        thread = ConnectionThread(m, index, queue)
-        thread.start()
-        threads.append(thread)
-
-    for t in threads:
-        t.join()
-
-    while not queue.empty():
-        rsp = queue.get()
-        maquinas[rsp['index']]['respostas'] = rsp['respostas']
-        
-
-
-
-
-
-    
-
-
-
-
-
-            
 
 serve_template('index.mako',
                autores=", ".join(__authors__),
