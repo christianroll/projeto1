@@ -69,9 +69,10 @@ class ClientHandler(threading.Thread):
                         saida = check_output(full_cmd, stderr=STDOUT, shell=True)
                     except CalledProcessError, e:
                         saida = e.output
-                    header = unidecode("RESPONSE " + cmd + " " + saida)
+                    header = "RESPONSE " + cmd + " " + saida
                     print("Enviando `{}` para {}".format(header, self.address[0]))
-                    self.socket.sendall(header.encode())
+                    self.socket.sendall(unidecode(header.decode()))
+                    print("funfou")
         except Exception, e:
             print("Error: '{}'".format(e))
             self.socket.close()

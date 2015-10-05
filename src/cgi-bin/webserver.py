@@ -62,11 +62,11 @@ if respostas:
 
                 if arg is None:
                     arg = ''
-                header = unidecode("REQUEST " + cmd + " " + arg)
+                header = "REQUEST " + cmd + " " + arg
                 DEBUG += "Enviando `{}` para {}:{}".format(header, m['ip'], m['porta'])
-                sock.sendall(header.encode())
+                sock.sendall(unidecode(header.decode()))
                 # Recebe
-                resposta = sock.recv(65536).decode()
+                resposta = sock.recv(65536)
                 DEBUG += 'Recebi: {}'.format(resposta)
                 cmd, saida = resposta.split(None, 2)[1:]
                 m['respostas'].append(("Maquina: " + m['ip'] + ", Comando: " + cmd_name(cmd), saida))
