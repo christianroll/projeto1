@@ -15,6 +15,8 @@ import cgitb
 import threading
 import os
 import socket
+import Queue
+import pprint
 
 from unidecode import unidecode
 
@@ -36,22 +38,33 @@ cgitb.enable()
 print("Content-type: text/html\n\n")
 
 DEBUG = ''
+
 respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 
 class ConnectionThread(threading.Thread):
-    def __init__(self, m):
-        print("Nova Thread")
+    def __init__(self, m, index, queue):
+        #print("Nova Thread")
         threading.Thread.__init__(self)
         self.m = m
-        # self.m['respostas'] = m['respostas']
+        self.q = queue
+        self.index = index
 
+
+        
     def run(self):
+
+        d = {}
+        d['ip'] = self.m['ip']
+        d['index'] = self.index
+        d['respostas'] = []
+
+
         # Envia os comandos para cada uma das máquinas e espera resposta
         for cmd in self.m['cmds']:
             arg = form.getfirst(self.m['ip'] + "_arg" + str(cmd))
             
-            print(self.m['ip'])
-            print(self.m['porta'])
+            #print(self.m['ip'])
+            #print(self.m['porta'])
 
 
             try:
@@ -80,23 +93,46 @@ class ConnectionThread(threading.Thread):
                     cmd = ''
                     saida = ''
 
-                self.m['respostas'].append(("Maquina: " + self.m['ip'] + ", Comando: " + cmd_name(cmd), saida))
-                print(self.m['respostas'])
+                d['respostas'].append(["Maquina: "+self.m['ip']+", Comando: " + cmd_name(cmd), saida])
 
             finally:
                 # DEBUG += 'Fechando socket\n'
                 sock.close()
+        self.q.put(d)
 
 
 # "Backend". Executado após form ser submetido.
+
 if respostas:
+
+    queue = Queue.Queue()
+
     form = cgi.FieldStorage()
 
-    for m in maquinas:
+    threads = []
+    for (index, m) in enumerate(maquinas):
         m['cmds'] = form.getlist(m['ip'])
-        m['respostas'] = []    
+        thread = ConnectionThread(m, index, queue)
+        thread.start()
+        threads.append(thread)
 
-        ConnectionThread(m).start()
+    for t in threads:
+        t.join()
+
+    while not queue.empty():
+        rsp = queue.get()
+        maquinas[rsp['index']]['respostas'] = rsp['respostas']
+        
+
+
+
+
+
+    
+
+
+
+
 
             
 
