@@ -16,7 +16,6 @@ import threading
 import os
 import socket
 import Queue
-import pprint
 
 from unidecode import unidecode
 
