@@ -60,6 +60,7 @@ class ClientHandler(threading.Thread):
                     arg = ''
                 print("Tipo: '{}', cmd: '{}', arg: '{}'".format(tipo, cmd, arg))
 
+                # Only request method allowed
                 if tipo == 'REQUEST':
                     full_cmd = cmd_name(cmd)
                     if arg:
@@ -72,8 +73,21 @@ class ClientHandler(threading.Thread):
                     header = "RESPONSE " + cmd + " " + saida
                     print("Enviando `{}` para {}".format(header, self.address[0]))
                     self.socket.sendall(unidecode(header.decode()))
+
+                # Returns 405 if receive a GET, POST, HEAD, PUT, OPTIONS, etc
+                else:
+                    header = "HTTP/1.1 405 Method Not Allowed\r\n" \
+                             "Allow: REQUEST\r\n" \
+                             "Connection: close\r\n\r\n"
+                    print("Enviando `{}` para {}".format(header, self.address[0]))
+                    self.socket.sendall(unidecode(header.decode()))
+                    print("Fechando o socket")
+                    self.socket.close()
+                    break
+
         except Exception, e:
             print("Error: '{}'".format(e))
+            print("Fechando o socket")
             self.socket.close()
 
 
