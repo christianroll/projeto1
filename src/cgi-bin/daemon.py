@@ -53,11 +53,27 @@ class ClientHandler(threading.Thread):
                     break
 
                 print("Recebi de '{}': '{}'".format(self.address[0], message))
+
+                # Eg.: message = "REQUEST 1 -j"
                 try:
                     tipo, cmd, arg = message.split(' ', 2)
+
+                # Eg.: message = "REQUEST 1"
                 except:
-                    tipo, cmd = message.split(' ')
-                    arg = ''
+                    try:
+                        tipo, cmd = message.split(' ')
+                        arg = ''
+
+                    # Eg.: message = "REQUEST"
+                    except:
+                        header = "HTTP/1.1 400 Bad Request\r\n" \
+                                 "Connection: close\r\n\r\n"
+                        print("Enviando `{}` para {}".format(header, self.address[0]))
+                        self.socket.sendall(unidecode(header.decode()))
+                        print("Fechando o socket")
+                        self.socket.close()
+                        break
+
                 print("Tipo: '{}', cmd: '{}', arg: '{}'".format(tipo, cmd, arg))
 
                 # Only request method allowed
@@ -75,6 +91,7 @@ class ClientHandler(threading.Thread):
                     self.socket.sendall(unidecode(header.decode()))
 
                 # Returns 405 if receive a GET, POST, HEAD, PUT, OPTIONS, etc
+                # Could also be 501 Method Not Implemented
                 else:
                     header = "HTTP/1.1 405 Method Not Allowed\r\n" \
                              "Allow: REQUEST\r\n" \
