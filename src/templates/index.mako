@@ -18,7 +18,7 @@
     %if DEBUG:
         <div id="debug">
             <h2>DEBUG</h2>
-            ${DEBUG}
+            <pre>${DEBUG}</pre>
         </div>
     %endif
 
