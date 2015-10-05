@@ -47,10 +47,10 @@ class ClientHandler(threading.Thread):
                 message = self.socket.recv(2 ** 16).decode()
                 message = re.sub(r"\r\n", "", message)
 
-                #if not message:
-                #    print("Empty message. Fechando o socket")
-                #    self.socket.close()
-                #    break
+                if not message:
+                    print("Empty message. Fechando o socket")
+                    self.socket.close()
+                    break
 
                 print("Recebi de '{}': '{}'".format(self.address[0], message))
                 try:
