@@ -30,6 +30,7 @@ __version__ = "1.0"
 
 class ClientHandler(threading.Thread):
     def __init__(self, (socket, address)):
+        print("Nova Thread")
         threading.Thread.__init__(self)
         self.socket = socket
         self.address = address
@@ -95,6 +96,8 @@ class Server:
         self.open_socket()
         while True:
             ClientHandler(self.server.accept()).start()
+        # Nunca chega aqui
+        print("Desligando o servidor?")
         self.server.close()
 
 
