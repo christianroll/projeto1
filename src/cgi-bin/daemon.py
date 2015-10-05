@@ -33,6 +33,7 @@ class ClientHandler(threading.Thread):
         threading.Thread.__init__(self)
         self.socket = socket
         self.address = address
+        self.socket.settimeout(60)
 
     # Clean arguments to make the command safe
     def clean_arg(self, message):
