@@ -26,7 +26,12 @@ A aplicação é formada pelas seguintes partes:
 *   [Unidecode](https://pypi.python.org/pypi/Unidecode)
 
 
-### Apache no OS X
+### Onde for rodar o `webserver.py` (OS X)
+    
+    $ pip install --upgrade pip 
+    $ pip install mako unidecode
+
+#### Apache
 
 Descomente as seguintes linhas em `/etc/apache2/httpd.conf`:
 
@@ -39,10 +44,11 @@ Descomente as seguintes linhas em `/etc/apache2/httpd.conf`:
 Reinicie o Apache com `sudo apachectl restart`
 
 
-### Ubuntu
+#### Onde for rodar o `daemon.py` (Ubuntu)
+
     $ sudo apt-get install python-pip python-dev build-essential 
     $ sudo pip install --upgrade pip 
-    $ pip install netifaces mako unidecode
+    $ pip install netifaces unidecode
 
 
 ## Alunos
