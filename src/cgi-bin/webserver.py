@@ -43,7 +43,6 @@ respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 if respostas:
     form = cgi.FieldStorage()
     # Envia os comandos para cada uma das máquinas e espera resposta
-    DEBUG += "<pre>"
     for m in maquinas:
         m['cmds'] = form.getlist(m['ip'])
         m['respostas'] = []
@@ -68,12 +67,19 @@ if respostas:
                 # Recebe
                 resposta = sock.recv(65536)
                 DEBUG += 'Recebi: {}'.format(resposta)
-                cmd, saida = resposta.split(None, 2)[1:]
+
+                try:
+                    cmd, saida = resposta.split(None, 2)[1:]
+                except:
+                    # TODO: FIXME
+                    #cmd = resposta.split(None, 2)[1]
+                    cmd = ''
+                    saida = ''
+
                 m['respostas'].append(("Maquina: " + m['ip'] + ", Comando: " + cmd_name(cmd), saida))
             finally:
                 DEBUG += 'Fechando socket'
                 sock.close()
-    DEBUG += "</pre>"
 
 
 serve_template('index.mako',

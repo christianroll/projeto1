@@ -72,7 +72,6 @@ class ClientHandler(threading.Thread):
                     header = "RESPONSE " + cmd + " " + saida
                     print("Enviando `{}` para {}".format(header, self.address[0]))
                     self.socket.sendall(unidecode(header.decode()))
-                    print("funfou")
         except Exception, e:
             print("Error: '{}'".format(e))
             self.socket.close()
