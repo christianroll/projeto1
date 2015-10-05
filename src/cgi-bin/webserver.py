@@ -48,25 +48,25 @@ if respostas:
         m['respostas'] = []
         for cmd in m['cmds']:
             arg = form.getfirst(m['ip'] + "_arg" + str(cmd))
-            DEBUG += "cmd = '{}'; arg: '{}'".format(cmd, arg)
+            DEBUG += "cmd = '{}'; arg: '{}'\n".format(cmd, arg)
 
             try:
                 # Cria um socket TCP/IP
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 # Conecta o socket à porta que a máquina está escutando
-                DEBUG += "Conectando-me a {} na porta {}".format(m['ip'], m['porta'])
+                DEBUG += "Conectando-me a {} na porta {}\n".format(m['ip'], m['porta'])
                 server_address = (m['ip'], m['porta'])
                 sock.connect(server_address)
-                DEBUG += "Conectou a {} na porta {}".format(m['ip'], m['porta'])
+                DEBUG += "Conectou a {} na porta {}\n".format(m['ip'], m['porta'])
 
                 if arg is None:
                     arg = ''
                 header = "REQUEST " + cmd + " " + arg
-                DEBUG += "Enviando `{}` para {}:{}".format(header, m['ip'], m['porta'])
+                DEBUG += "Enviando `{}` para {}:{}\n".format(header, m['ip'], m['porta'])
                 sock.sendall(unidecode(header.decode()))
                 # Recebe
                 resposta = sock.recv(65536)
-                DEBUG += 'Recebi: {}'.format(resposta)
+                DEBUG += 'Recebi: {}\n'.format(resposta)
 
                 try:
                     cmd, saida = resposta.split(None, 2)[1:]
@@ -78,7 +78,7 @@ if respostas:
 
                 m['respostas'].append(("Maquina: " + m['ip'] + ", Comando: " + cmd_name(cmd), saida))
             finally:
-                DEBUG += 'Fechando socket'
+                DEBUG += 'Fechando socket\n'
                 sock.close()
 
 
