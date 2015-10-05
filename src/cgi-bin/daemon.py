@@ -94,8 +94,7 @@ class Server:
     def start_listen(self):
         self.open_socket()
         while True:
-            clientHandler = ClientHandler(self.server.accept())
-            clientHandler.start()
+            ClientHandler(self.server.accept()).start()
         self.server.close()
 
 
