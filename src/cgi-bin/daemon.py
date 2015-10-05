@@ -42,35 +42,39 @@ class ClientHandler(threading.Thread):
         return re.sub(whitelist, '', message)
 
     def run(self):
-        while True:
-            message = self.socket.recv(2 ** 16).decode()
-            message = re.sub(r"\r\n", "", message)
+        try:
+            while True:
+                message = self.socket.recv(2 ** 16).decode()
+                message = re.sub(r"\r\n", "", message)
 
-            if not message:
-                print("Empty message. Fechando o socket")
-                self.socket.close()
-                break
+                if not message:
+                    print("Empty message. Fechando o socket")
+                    self.socket.close()
+                    break
 
-            print("Recebi de '{}': '{}'".format(self.address[0], message))
-            try:
-                tipo, cmd, arg = message.split(' ', 2)
-            except:
-                tipo, cmd = message.split(' ')
-                arg = ''
-            print("Tipo: '{}', cmd: '{}', arg: '{}'".format(tipo, cmd, arg))
-
-            if tipo == 'REQUEST':
-                full_cmd = cmd_name(cmd)
-                if arg:
-                    full_cmd += " " + self.clean_arg(arg)
-                print("Rodando: `{}`".format(full_cmd))
+                print("Recebi de '{}': '{}'".format(self.address[0], message))
                 try:
-                    saida = check_output(full_cmd, stderr=STDOUT, shell=True)
-                except CalledProcessError, e:
-                    saida = e.output
-                header = unidecode("RESPONSE " + cmd + " " + saida)
-                print("Enviando `{}` para {}".format(header, self.address[0]))
-                self.socket.sendall(header.encode())
+                    tipo, cmd, arg = message.split(' ', 2)
+                except:
+                    tipo, cmd = message.split(' ')
+                    arg = ''
+                print("Tipo: '{}', cmd: '{}', arg: '{}'".format(tipo, cmd, arg))
+
+                if tipo == 'REQUEST':
+                    full_cmd = cmd_name(cmd)
+                    if arg:
+                        full_cmd += " " + self.clean_arg(arg)
+                    print("Rodando: `{}`".format(full_cmd))
+                    try:
+                        saida = check_output(full_cmd, stderr=STDOUT, shell=True)
+                    except CalledProcessError, e:
+                        saida = e.output
+                    header = unidecode("RESPONSE " + cmd + " " + saida)
+                    print("Enviando `{}` para {}".format(header, self.address[0]))
+                    self.socket.sendall(header.encode())
+        except Exception, e:
+            print("Error: '{}'".format(e))
+            self.socket.close()
 
 
 class Server:
