@@ -35,6 +35,7 @@ cgitb.enable()
 # CGI header
 print("Content-type: text/html\n\n")
 
+DEBUG = ''
 respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 
 
@@ -42,40 +43,42 @@ respostas = True if os.environ['REQUEST_METHOD'] == 'POST' else False
 if respostas:
     form = cgi.FieldStorage()
     # Envia os comandos para cada uma das máquinas e espera resposta
-    print("<pre>")
+    DEBUG += "<pre>"
     for m in maquinas:
         m['cmds'] = form.getlist(m['ip'])
         m['respostas'] = []
         for cmd in m['cmds']:
             arg = form.getfirst(m['ip'] + "_arg" + str(cmd))
-            print("cmd = '{}'; arg: '{}'".format(cmd, arg))
+            DEBUG += "cmd = '{}'; arg: '{}'".format(cmd, arg)
 
             try:
                 # Cria um socket TCP/IP
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 # Conecta o socket à porta que a máquina está escutando
-                print("Conectando-me a {} na porta {}".format(m['ip'], m['porta']))
+                DEBUG += "Conectando-me a {} na porta {}".format(m['ip'], m['porta'])
                 server_address = (m['ip'], m['porta'])
                 sock.connect(server_address)
-                print("Conectou a {} na porta {}".format(m['ip'], m['porta']))
+                DEBUG += "Conectou a {} na porta {}".format(m['ip'], m['porta'])
 
                 if arg is None:
                     arg = ''
                 header = unidecode("REQUEST " + cmd + " " + arg)
-                print("Enviando `{}` para {}:{}".format(header, m['ip'], m['porta']))
+                DEBUG += "Enviando `{}` para {}:{}".format(header, m['ip'], m['porta'])
                 sock.sendall(header.encode())
                 # Recebe
                 resposta = sock.recv(65536).decode()
-                print('Recebi: {}'.format(resposta))
+                DEBUG += 'Recebi: {}'.format(resposta)
                 cmd, saida = resposta.split(None, 2)[1:]
                 m['respostas'].append(("Maquina: " + m['ip'] + ", Comando: " + cmd_name(cmd), saida))
             finally:
-                print('Fechando socket')
+                DEBUG += 'Fechando socket'
                 sock.close()
-    print("</pre>")
+    DEBUG += "</pre>"
+
 
 serve_template('index.mako',
                autores=", ".join(__authors__),
                maquinas=maquinas,
                comandos=comandos,
-               respostas=respostas)
+               respostas=respostas,
+               DEBUG=DEBUG)

@@ -15,4 +15,11 @@
         <%include file="respostas.mako"/>
     %endif
 
+    %if DEBUG:
+        <div id="debug">
+            <h2>DEBUG</h2>
+            ${DEBUG}
+        </div>
+    %endif
+
 </%block>
