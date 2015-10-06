@@ -1,2 +1,7 @@
 Options +ExecCGI
-AddHandler cgi-script cgi py
+AddHandler cgi-script py
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule .* src/cgi-bin/webserver.py [L]
+</IfModule>
