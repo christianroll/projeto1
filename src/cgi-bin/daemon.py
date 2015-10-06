@@ -27,7 +27,7 @@ __authors__ = (
 __license__ = "GPL v3"
 __version__ = "1.0"
 
-
+# Class that deal with client requests
 class ClientHandler(threading.Thread):
     def __init__(self, (socket, address)):
         print("Nova Thread")
@@ -79,6 +79,7 @@ class ClientHandler(threading.Thread):
                 # Only request method allowed
                 if tipo == 'REQUEST':
                     full_cmd = cmd_name(cmd)
+                    # Verify if there is any argument
                     if arg:
                         full_cmd += " " + self.clean_arg(arg)
                     print("Rodando: `{}`".format(full_cmd))
@@ -107,7 +108,7 @@ class ClientHandler(threading.Thread):
             print("Fechando o socket")
             self.socket.close()
 
-
+# Class that prepare socket for listening
 class Server:
     def __init__(self, address):
         self.host = address[0]
@@ -130,9 +131,10 @@ class Server:
     def start_listen(self):
         self.open_socket()
         while True:
+            # Call a thread for each client connection
             ClientHandler(self.server.accept()).start()
-        # Nunca chega aqui
-        print("Desligando o servidor?")
+        # Never gets here!
+        print("Turning off server?")
         self.server.close()
 
 

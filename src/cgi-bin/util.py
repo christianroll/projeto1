@@ -27,7 +27,11 @@ comandos = {
 
 # Get command name from it's number
 def cmd_name(cmd):
-    return comandos.get(cmd, '')  # TODO:raise exception if invalid cmd
+    try:
+        return comandos.get(cmd, '') 
+    except KeyError:
+        print ("Command not found!")
+
 
 
 # Returns a list with all localhost IPs. Needs netifaces
