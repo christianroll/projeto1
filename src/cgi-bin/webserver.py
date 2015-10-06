@@ -62,6 +62,7 @@ class ConnectionThread(threading.Thread):
             try:
                 # Creates a TCP/IP socket
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(14)
                 # Connects the socket to the machine listening door
                 server_address = (self.m['ip'], self.m['porta'])
                 sock.connect(server_address)
@@ -76,19 +77,18 @@ class ConnectionThread(threading.Thread):
                 try:
                     # Eg.: cmd = 1 saida ="answer"
                     cmd, saida = resposta.split(None, 2)[1:]
-
                 except:
-                    # TODO: FIXME
-                    # cmd = resposta.split(None, 2)[1]
                     cmd = ''
                     saida = ''
-                # Put answer from server in dicionary 
+                # Put answer from server in dicionary
                 d['respostas'].append(["Maquina: " + self.m['ip'] +
                                        ", Comando: " + cmd_name(cmd), saida])
-
+            except Exception:
+                pass
             finally:
                 sock.close()
-        # Put dictionary in queue       
+
+        # Put dictionary in queue
         self.q.put(d)
 
 
