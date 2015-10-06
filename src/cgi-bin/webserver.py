@@ -55,14 +55,14 @@ class ConnectionThread(threading.Thread):
         d['index'] = self.index
         d['respostas'] = []
 
-        # For each command from each machine create a socket connection
+        # For each command from each machine, create a socket connection
         for cmd in self.m['cmds']:
             arg = form.getfirst(self.m['ip'] + "_arg" + str(cmd))
 
             try:
-                # Cria um socket TCP/IP
+                # Creates a TCP/IP socket
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                # Conecta o socket à porta que a máquina está escutando
+                # Connects the socket to the machine listening door
                 server_address = (self.m['ip'], self.m['porta'])
                 sock.connect(server_address)
                 # Check is there is any arg to be sent
@@ -92,7 +92,7 @@ class ConnectionThread(threading.Thread):
         self.q.put(d)
 
 
-# "Backend". Executado após form ser submetido.
+# "Backend". Runs after form submission.
 if respostas:
     # Create queue for deal with data inside threads and return it in main()
     queue = Queue.Queue()
