@@ -27,6 +27,7 @@ __authors__ = (
 __license__ = "GPL v3"
 __version__ = "1.0"
 
+
 # Class that deal with client requests
 class ClientHandler(threading.Thread):
     def __init__(self, (socket, address)):
@@ -107,6 +108,7 @@ class ClientHandler(threading.Thread):
             print("Error: '{}'".format(e))
             print("Fechando o socket")
             self.socket.close()
+
 
 # Class that prepare socket for listening
 class Server:
