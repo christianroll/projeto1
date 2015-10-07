@@ -14,7 +14,9 @@ web.
 A aplicação é formada pelas seguintes partes:
 
 - `webserver.py`: programa CGI acoplado ao servidor web. Também é o backend;
-- `index.html`: interface web. Redireciona para webserver.py;
+- `util.py`: acoplado ao daemon, configura automaticamente o ip;
+- `settings.py`: configuração das máquinas daemon no webserver.py;
+- `view.py`: definição do template mako para webserver.py;
 - `daemon.py`: programa que executa comandos localmente e retorna as saídas.
 
 
